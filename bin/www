@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+var app 	= require('../app'),
+	logger 	= require('../util/logger');
+
+app.set('port', process.env.PORT || 5000);
+
+var server = app.listen(app.get('port'), function() {
+  logger.debug('Express server listening on port ' + server.address().port);
+});
+
+
+//When an uncaught exception occurs,let the process die and restart it with forever
+process.on('uncaughtException', function (err) {
+  logger.error((new Date).toUTCString() + ' uncaughtException:', err.message)
+  logger.error(err.stack)
+  //process.exit(1)
+});
