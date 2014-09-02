@@ -14,7 +14,19 @@ var testData = (function(){
 			take: data.length,
 			totalRecords: data.length
 		});
-	};
+	}
+
+	/* Getting functional here */
+	function transform(transformFunction){
+	  return function(e){
+	    return transformFunction(e);
+	  }
+	}
+
+	function getShowData(transformFuction){
+		return _.filter(samplePayload, transform(transformFuction));	
+	}
+	
 
 	return {
 
@@ -24,14 +36,13 @@ var testData = (function(){
 		fullPayloadResponse : JSON.stringify(payloadResponse),
 		emptyPayload 		: getSamplePayload([]),
 		getPayloadWithepisodeCountZero : function(){
-			return getSamplePayload(_.filter(samplePayload.payload, function(show){
-				return show.episodeCount === 0;
+			return getSamplePayload(getShowData(function(e){ 
+				return e.episodeCount === 0 
 			}));
-
 		},
 		getPayloadWithDRMFalse : function(){
-			return getSamplePayload(_.filter(samplePayload.payload, function(show){
-				return show.drm === false;
+			return getSamplePayload(getShowData(function(e){ 
+				return e.drm === false 
 			}));
 		},
 		getPayloadWithOnlyOneShow: function(){
